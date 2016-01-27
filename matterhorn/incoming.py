@@ -8,26 +8,25 @@ Provides API for `uphill` messages.
 
 '''
 
+import json
 import requests
 
-class Uphill(object):
-    def __init__(self, url, channel=None, username=None, icon_url=None):
-        # mattermost server url
-        self.url = url
+from .core import HillBase
 
-        # channel to send to 
-        self.channel = channel
-        self.username = username
-        self.icon_url = icon_url
+class Uphill(HillBase):
+    def __init__(self, url=None, channel=None, username=None, icon_url=None):
+        self.matterhorn_config = {}
+        self.defaults = {
+            'channel': channel,
+            'username': username,
+            'icon_url': icon_url
+        }
 
-    def _update_payload(payload, options):
+    def _update_payload(self, payload, options):
         for option in 'channel', 'username', 'icon_url':
-            if option in options:
-                payload[option] = options[option]
-            else:
-                value = gettattr(self, option, None)
-                if value is not None:
-                    payload[option] = value
+            value = self._get_option(option, options)
+            if value is not None:
+                payload[option] = value
 
         return payload
 
@@ -37,12 +36,14 @@ class Uphill(object):
         }, options)
 
         req = requests.post(
-            self.url,
+            self._get_option('url'),
             headers={'Content-Type': 'application/json'},
             data=json.dumps(payload),
             verify=False)
 
-        if r.status_code is not requests.codes.ok:
+        if req.status_code is not requests.codes.ok:
             print 'Error'
+
+        return 'ok'
 
 

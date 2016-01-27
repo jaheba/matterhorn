@@ -1,38 +1,64 @@
 
 
+from collections import namedtuple
+
+Message = namedtuple('Message', [
+    'channel_id',
+    'channel_name',
+    'team_domain',
+    'team_id',
+    'text',
+    'timestamp',
+    'user_id',
+    'user_name',
+    'trigger_word'
+])
+
 # receiving messages from mattermost
 
 from flask import request
 
-class Downhill(object):
+from core import HillBase
+
+class Downhill(HillBase):
     def __init__(self, blueprint, token=None, username=None, icon_url=None):
         # config is overriten by matterhorn later
         self.matterhorn_config = {}
 
-
         self.blueprint = blueprint
         self.token = token
 
-        self.username = username
-        self.icon_url = icon_url
+        self.defaults = {
+            'token': token,
+            'username': username,
+            'icon_url': icon_url
+        }
 
-        self.map = {}
+        self.callback = None
 
-        blueprint.route('/')(self._receive)
+        blueprint.route('/', methods=['POST'])(self._receive)
 
-    def _receive():
+    def _receive(self):
         data = request.form
+        print data
 
-        if data.get('token', None) != TOKEN:
+        if data.get('token', None) != self._get_option('token'):
             print 'Invalid TOKEN'
             return 'Invalid Token', 400
 
+        msg = Message(
+            data['channel_id'],
+            data['channel_name'],
+            data['team_domain'],
+            data['team_id'],
+            data['text'],
+            data['timestamp'],
+            data['user_id'],
+            data['user_name'],
+            data['trigger_word']
+        )
 
-    def __call__(self, pattern, **options):
-        pattern = pattern.strip().split()[0]
+        return self.callback(msg)
 
-        def inner(func):
-            self.map[pattern] = func
-            return func
-
-        return inner
+    def __call__(self, callback):
+        self.callback = callback
