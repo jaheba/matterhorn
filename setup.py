@@ -8,8 +8,9 @@ setup(
     description='Integration Framework for Mattermost',
     author='Jasper Schulz',
     author_email='jasper.b.schulz@gmail.com',
+    url='https://github.com/jaheba/matterhorn',
+    
     packages=['matterhorn'],
-
     install_requires=[
         "Flask==0.10.1",
         "requests==2.9.1"

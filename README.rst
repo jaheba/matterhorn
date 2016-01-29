@@ -2,6 +2,8 @@
 .. image:: logo.png
     :width: 200px
 
+Matterhorn
+~~~~~~~~~~
 
 Matterhorn is a framework for writing integrations for the mattermost communication platform. It supports both incoming (`uphill`) and outgoing (`downhill`) webhooks.
 

@@ -30,7 +30,7 @@ class Uphill(HillBase):
 
         return payload
 
-    def send(self, message, **options):
+    def send(self, message, hook_data=None, **options):
         payload = self._update_payload({
             'text': message 
         }, options)
