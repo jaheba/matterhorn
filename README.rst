@@ -1,8 +1,9 @@
 
-matterhorn
-~~~~~~~~~~
+.. image:: logo.png
+    :width: 200px
 
-`matterhorn` is a framework for writing integrations for the mattermost communication platform. It supports both incoming (`uphill`) and outgoing (`downhill`) webhooks.
+
+Matterhorn is a framework for writing integrations for the mattermost communication platform. It supports both incoming (`uphill`) and outgoing (`downhill`) webhooks.
 
 
 Installation
@@ -74,13 +75,11 @@ Example::
 
         greeter = Downhill(
             blueprint=blueprint,
-            username='calcbot'
+            username='greeter bot'
         )
 
         @syncbot
         def handle(message):
             return greeter.response('Hello %s!' %message.user_name)
-
-
 
         return blueprint, greeter
