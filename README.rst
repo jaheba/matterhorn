@@ -28,7 +28,7 @@ Example::
         name='github',
         url_prefix='/in/github',
         plugin='mm_github.github',
-        url='http://chat.soft-dev.org/hooks/hrwtbj9db7dhbx9oza1bzi8tee'
+        url='http://yourdomain.com/hooks/<hookid>'
     )
 
 
